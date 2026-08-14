@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPA vs NDA — Total &amp; Potential Scorecard</title>
+<meta name="description" content="A two-sided comparison of India's UPA (2004-14) and NDA (2014-26) decades: hard numbers as 'Total', and a four-component 1-10 judgment model as 'Potential'.">
+<style>
+  :root{
+    --bg:#faf9f7; --panel:#ffffff; --ink:#1c1b19; --muted:#6b6862;
+    --line:#e5e2dc; --line2:#d5d1c9;
+    --pos:#1d7a52; --pos-bg:#e8f4ee;
+    --neg:#a8342a; --neg-bg:#fbeceb;
+    --warn:#8a6212; --warn-bg:#fcf3e0;
+    --blue:#1f5f8b; --blue-bg:#e8f1f7;
+    --upa:#1f5f8b; --nda:#8a5a12;
+    --tabbg:#efece7;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#16151a; --panel:#1e1d23; --ink:#eceae6; --muted:#a09c95;
+      --line:#312f37; --line2:#403d47;
+      --pos:#5cc494; --pos-bg:#163024;
+      --neg:#f2887c; --neg-bg:#3a1d1a;
+      --warn:#e0b155; --warn-bg:#33270e;
+      --blue:#7cb8de; --blue-bg:#12293a;
+      --upa:#7cb8de; --nda:#e0b155;
+      --tabbg:#26252c;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; padding:30px 20px 70px; background:var(--bg); color:var(--ink);
+    font:16px/1.55 ui-sans-serif,-apple-system,"Segoe UI",Inter,Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1060px;margin:0 auto}
+  h1{font-size:1.85rem;line-height:1.2;margin:0 0 6px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:.92rem;margin:0 0 22px}
+
+  /* ---- tabs ---- */
+  .tabs{display:flex;gap:4px;background:var(--tabbg);padding:4px;border-radius:11px;
+    margin:0 0 22px;overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:20;
+    box-shadow:0 4px 14px -8px rgba(0,0,0,.35)}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs button{
+    flex:1 1 auto;white-space:nowrap;appearance:none;border:0;cursor:pointer;
+    background:transparent;color:var(--muted);font:600 .875rem/1 inherit;
+    padding:10px 16px;border-radius:8px;transition:background .14s,color .14s;
+  }
+  .tabs button:hover{color:var(--ink)}
+  .tabs button[aria-selected="true"]{background:var(--panel);color:var(--ink);
+    box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .tabs button:focus-visible{outline:2px solid var(--blue);outline-offset:1px}
+  .tabs .n{font-variant-numeric:tabular-nums;opacity:.5;margin-right:6px;font-weight:700}
+  [role="tabpanel"][hidden]{display:none}
+
+  h2{font-size:1.1rem;margin:0 0 4px;letter-spacing:-.01em}
+  h2 .tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;
+    padding:3px 8px;border-radius:5px;vertical-align:3px;margin-left:9px}
+  .tag.solid{background:var(--blue-bg);color:var(--blue)}
+  .tag.judge{background:var(--warn-bg);color:var(--warn)}
+  .lede{color:var(--muted);font-size:.89rem;margin:6px 0 14px;max-width:76ch}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:.87rem}
+  th,td{padding:11px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+  thead th{background:color-mix(in srgb,var(--panel) 82%,var(--bg));font-size:.7rem;
+    text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:700;
+    border-bottom:1px solid var(--line2)}
+  tbody tr:last-child td{border-bottom:none}
+  td.item{font-weight:600;width:19%}
+  td.upa{color:var(--upa)} td.nda{color:var(--nda)}
+  .note{color:var(--muted);font-size:.79rem;display:block;margin-top:3px;font-weight:400}
+  .chip{display:inline-block;padding:2px 8px;border-radius:20px;font-weight:700;font-size:.79rem;
+    font-variant-numeric:tabular-nums}
+  .c-pos{background:var(--pos-bg);color:var(--pos)}
+  .c-neg{background:var(--neg-bg);color:var(--neg)}
+  .c-neu{background:var(--warn-bg);color:var(--warn)}
+  .c-blue{background:var(--blue-bg);color:var(--blue)}
+  .verdict{font-size:.79rem;color:var(--muted)}
+  .formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.83rem;
+    background:var(--blue-bg);color:var(--blue);padding:9px 13px;border-radius:8px;
+    display:inline-block;margin:2px 0 14px}
+  .panel{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--warn);
+    border-radius:10px;padding:16px 18px;margin:16px 0}
+  .panel.info{border-left-color:var(--blue)}
+  .panel h3{margin:0 0 8px;font-size:.95rem}
+  .panel p{margin:0 0 9px;font-size:.87rem;color:var(--muted)}
+  .panel p:last-child{margin-bottom:0}
+  .panel strong{color:var(--ink)}
+  .rank{color:var(--muted);font-variant-numeric:tabular-nums;width:26px}
+  .scroll{overflow-x:auto}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);
+    font-size:.79rem;color:var(--muted);max-width:82ch}
+  footer a{color:var(--blue)}
+  @media(max-width:640px){
+    body{padding:18px 12px 54px} td.item{width:auto} h1{font-size:1.4rem}
+    .tabs button{padding:9px 12px;font-size:.82rem} .tabs .n{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>UPA vs NDA — Total &amp; Potential</h1>
+  <p class="sub">India, 2004–2014 vs 2014–2026 · a framework for argument, not a scoreboard</p>
+
+  <div class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" id="t1" aria-controls="p1" aria-selected="true"><span class="n">1</span>Total</button>
+    <button role="tab" id="t2" aria-controls="p2" aria-selected="false"><span class="n">2</span>Potential</button>
+    <button role="tab" id="t3" aria-controls="p3" aria-selected="false"><span class="n">3</span>Full PM board</button>
+    <button role="tab" id="t4" aria-controls="p4" aria-selected="false"><span class="n">4</span>Context &amp; caveats</button>
+  </div>
+
+  <!-- ============ TAB 1 ============ -->
+  <section role="tabpanel" id="p1" aria-labelledby="t1">
+    <h2>Total <span class="tag solid">hard numbers</span></h2>
+    <p class="lede">UPA decade (2004–14) vs NDA (2014–present). The test: separate a <em>step-change in kind</em> from <em>continuation of trend</em>.</p>
+    <div class="card scroll">
+    <table>
+      <thead><tr><th>Line item</th><th>UPA 2004–14</th><th>NDA 2014–26</th><th>Read</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="item">Avg GDP growth</td>
+          <td class="upa"><strong>7.7%</strong><span class="note">Highest of any PM on the board</span></td>
+          <td class="nda"><strong>6.0%</strong><span class="note">Includes the FY21 COVID contraction</span></td>
+          <td><span class="chip c-blue">UPA</span> <span class="verdict">on the headline rate</span></td>
+        </tr>
+        <tr>
+          <td class="item">Power capacity</td>
+          <td class="upa">~105 → 249 GW <span class="note">≈2.4×</span></td>
+          <td class="nda">249 → 457 GW (Nov '24) <span class="note">+83.8%, ≈1.8×</span></td>
+          <td><span class="chip c-neu">Trend</span> <span class="verdict">both roughly doubled</span></td>
+        </tr>
+        <tr>
+          <td class="item">National highways</td>
+          <td class="upa">65,569 → 79,116 km <span class="note">+13,547 km over the decade</span></td>
+          <td class="nda">91,287 → 146,145 km (Dec '23) <span class="note">+~54,900 km, +60%</span></td>
+          <td><span class="chip c-pos">Break</span> <span class="verdict">~4× the pace — the strongest NDA row, but see caveat 3</span></td>
+        </tr>
+        <tr>
+          <td class="item">Solar</td>
+          <td class="upa">+2.82 GW over 10 yrs</td>
+          <td class="nda">→ ~100 GW by 2025</td>
+          <td><span class="chip c-neu">Base effect</span> <span class="verdict">real pace, but 42× is theatre off a near-zero base plus an ~80% global cost collapse</span></td>
+        </tr>
+        <tr>
+          <td class="item">Renewables (total)</td>
+          <td class="upa">—</td>
+          <td class="nda">76.4 → 203.1 GW <span class="note">+165%</span></td>
+          <td><span class="chip c-neu">Trend</span> <span class="verdict">solid, but riding the global renewables wave</span></td>
+        </tr>
+        <tr>
+          <td class="item">Airports</td>
+          <td class="upa">Delhi, Mumbai, Bengaluru, Hyderabad PPP builds (2008–10)</td>
+          <td class="nda">Operational count roughly doubled (135 by FY22); UDAN regional</td>
+          <td><span class="chip c-neu">Trend</span> <span class="verdict">UPA laid the marquee foundation; UDAN is the NDA differentiator</span></td>
+        </tr>
+        <tr>
+          <td class="item">Internet / mobile users</td>
+          <td class="upa">—</td>
+          <td class="nda">25 cr → 95 cr</td>
+          <td><span class="chip c-neu">Exogenous</span> <span class="verdict">Jio (2016) + global cost curves — happens under any government</span></td>
+        </tr>
+        <tr>
+          <td class="item">Bank accounts <span class="note">Jan Dhan</span></td>
+          <td class="upa">~50% of adults banked</td>
+          <td class="nda">14.7 cr yr-1 → 53.1 cr (Aug '24); near-universal</td>
+          <td><span class="chip c-pos">Break</span> <span class="verdict">no UPA analogue — and the substrate UPI sits on</span></td>
+        </tr>
+        <tr>
+          <td class="item">Toilets / OD <span class="note">Swachh Bharat</span></td>
+          <td class="upa">No proportionate precedent</td>
+          <td class="nda">Behavioural + construction push at unusual scale</td>
+          <td><span class="chip c-pos">Break</span> <span class="verdict">step-function — no growth rate to compare</span></td>
+        </tr>
+        <tr>
+          <td class="item">LPG to poor <span class="note">Ujjwala</span></td>
+          <td class="upa">No proportionate precedent</td>
+          <td class="nda">Shifted the target population, not just the count</td>
+          <td><span class="chip c-pos">Break</span> <span class="verdict">step-function</span></td>
+        </tr>
+        <tr>
+          <td class="item">Rail electrification, metro, ports, gas pipeline, transmission</td>
+          <td class="upa">Already expanding — Golden Quadrilateral, Delhi Metro (2002, heavy UPA expansion)</td>
+          <td class="nda">Continued compounding</td>
+          <td><span class="chip c-neu">Trend</span> <span class="verdict">continuation, not regime break</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="panel info">
+      <h3>The verdict this table supports</h3>
+      <p>Most rows are <strong>compounding on an existing trajectory</strong>, not a regime break. Two things survive the test: <strong>national highways</strong> (a genuine acceleration in pace) and the <strong>three inclusion programmes</strong> — Jan Dhan, Swachh Bharat, Ujjwala — which are step-functions with no UPA analogue. Jan Dhan is the most consequential, because financial inclusion is the substrate the entire digital-payments stack sits on.</p>
+    </div>
+  </section>
+
+  <!-- ============ TAB 2 ============ -->
+  <section role="tabpanel" id="p2" aria-labelledby="t2" hidden>
+    <h2>Potential <span class="tag judge">judgment, 1–10</span></h2>
+    <p class="lede">Head-to-head on the four-component model. Two positives (what you built, what you rescued) against two negatives (what you broke, what you wasted).</p>
+    <div class="formula">POTENTIAL = Planted + Crisis-converted − Damage − Squander</div>
+    <div class="card scroll">
+    <table>
+      <thead><tr><th>Component</th><th>Manmohan (UPA)</th><th>Modi (NDA)</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="item">Planted <span class="note">what you built</span></td>
+          <td><span class="chip c-pos">7</span></td>
+          <td><span class="chip c-pos">7</span></td>
+          <td>MMS: Aadhaar, US nuclear deal, NREGA, RTI · Modi: Jan Dhan, Ujjwala, Swachh Bharat</td>
+        </tr>
+        <tr>
+          <td class="item">Crisis converted <span class="note">bad hand played well</span></td>
+          <td><span class="chip c-pos">4</span><span class="note">derived</span></td>
+          <td><span class="chip c-pos">3</span><span class="note">derived</span></td>
+          <td>MMS: 2008 GFC absorbed without a banking collapse · Modi: COVID response</td>
+        </tr>
+        <tr>
+          <td class="item">Damage <span class="note">what you broke</span></td>
+          <td><span class="chip c-neg">4</span></td>
+          <td><span class="chip c-neg">5</span></td>
+          <td>MMS: policy paralysis 2012–14; scams scored low because the courts didn't sustain 2G · Modi: demonetisation; contested data and institutions</td>
+        </tr>
+        <tr>
+          <td class="item">Squander <span class="note">good hand wasted</span></td>
+          <td><span class="chip c-neg">5</span></td>
+          <td><span class="chip c-neg">7</span></td>
+          <td>MMS: rode the 2003–08 global boom more than he banked it · Modi: <strong>the 2014–16 oil crash absorbed into excise, not converted</strong></td>
+        </tr>
+        <tr style="background:color-mix(in srgb,var(--panel) 80%,var(--bg))">
+          <td class="item">NET POTENTIAL</td>
+          <td><span class="chip c-pos">+2</span></td>
+          <td><span class="chip c-neg">−2</span></td>
+          <td class="verdict">Both modest. Modi goes negative on squander alone.</td>
+        </tr>
+        <tr style="background:color-mix(in srgb,var(--panel) 80%,var(--bg))">
+          <td class="item">TOTAL (GDP)</td>
+          <td><span class="chip c-blue">7.7%</span></td>
+          <td><span class="chip c-blue">6.0%</span></td>
+          <td class="verdict">The divergence: MMS has the best GDP on the board and near-zero potential. He harvested more than he planted.</td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="panel info">
+      <h3>Why the two columns disagree</h3>
+      <p>The sharpest thing this exercise produces is that <strong>GDP and potential rarely agree</strong>. Manmohan posts the highest growth on the board and scores near zero on potential. Rao posts a middling 5.1% and scores the highest potential by a wide margin — the planter the economy didn't reward in his own years. Growth is what the data rewarded; potential is what judgment rewards.</p>
+    </div>
+  </section>
+
+  <!-- ============ TAB 3 ============ -->
+  <section role="tabpanel" id="p3" aria-labelledby="t3" hidden>
+    <h2>Full PM board <span class="tag judge">ranked by net potential</span></h2>
+    <p class="lede">Crisis-converted scores marked <em>derived</em> were back-calculated from the three- and four-component nets rather than stated outright.</p>
+    <div class="card scroll">
+    <table>
+      <thead><tr>
+        <th class="rank">#</th><th>PM</th><th>GDP</th><th>Plant</th><th>Crisis</th><th>Damage</th><th>Squander</th><th>Net</th><th>Signature</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="rank">1</td><td class="item">Narasimha Rao</td><td>5.1%</td><td><span class="chip c-pos">10</span></td><td><span class="chip c-pos">9</span></td><td><span class="chip c-neg">1</span></td><td><span class="chip c-neg">0</span></td><td><span class="chip c-pos">+18</span></td><td class="verdict">Handed a near-default crisis, made it the launchpad. Built a lot, broke and wasted almost nothing.</td></tr>
+        <tr><td class="rank">2</td><td class="item">Shastri</td><td>4.5%</td><td><span class="chip c-pos">6</span></td><td><span class="chip c-pos">6</span></td><td><span class="chip c-neg">1</span></td><td><span class="chip c-neg">0</span></td><td><span class="chip c-pos">+11</span></td><td class="verdict">Small planter, two crises converted (1965 war, food), nothing broken.</td></tr>
+        <tr><td class="rank">3</td><td class="item">Nehru</td><td>4.0%</td><td><span class="chip c-pos">10</span></td><td><span class="chip c-pos">2</span><span class="note">derived</span></td><td><span class="chip c-neg">7</span></td><td><span class="chip c-neg">2</span></td><td><span class="chip c-pos">+3</span></td><td class="verdict">Biggest plant on the board (IITs, ISRO, IIMs) nearly cancelled by License Raj and 1962. And he had ~17 years, not 12, to entrench it.</td></tr>
+        <tr><td class="rank">4</td><td class="item">Vajpayee</td><td>6.0%</td><td><span class="chip c-pos">8</span></td><td><span class="chip c-neu">n/s</span></td><td><span class="chip c-neg">2</span></td><td><span class="chip c-neg">3</span></td><td><span class="chip c-pos">+3</span><span class="note">3-part only</span></td><td class="verdict">Golden Quadrilateral, Pokhran-II, NTP-99. Never restated on the four-component board.</td></tr>
+        <tr><td class="rank">5</td><td class="item">Manmohan</td><td>7.7%</td><td><span class="chip c-pos">7</span></td><td><span class="chip c-pos">4</span><span class="note">derived</span></td><td><span class="chip c-neg">4</span></td><td><span class="chip c-neg">5</span></td><td><span class="chip c-pos">+2</span></td><td class="verdict">Highest GDP, lowest potential-to-GDP ratio on the board. The harvester.</td></tr>
+        <tr><td class="rank">6</td><td class="item">Indira</td><td>3.2%</td><td><span class="chip c-pos">6.5</span></td><td><span class="chip c-pos">7</span></td><td><span class="chip c-neg">9</span></td><td><span class="chip c-neg">4</span></td><td><span class="chip c-neu">+0.5?</span></td><td class="verdict">Stated as +2.5 but the components sum to +0.5 — <strong>this row does not reconcile</strong>. Crisis 7 vs damage 9 is the most load-bearing pair in the model.</td></tr>
+        <tr><td class="rank">7</td><td class="item">Modi</td><td>6.0%</td><td><span class="chip c-pos">7</span></td><td><span class="chip c-pos">3</span><span class="note">derived</span></td><td><span class="chip c-neg">5</span></td><td><span class="chip c-neg">7</span></td><td><span class="chip c-neg">−2</span></td><td class="verdict">Real plantings, second-tallest squander bar. The oil-windfall story.</td></tr>
+        <tr><td class="rank">8</td><td class="item">Morarji Desai</td><td>5.5%</td><td><span class="chip c-pos">3</span></td><td><span class="chip c-pos">2</span><span class="note">derived</span></td><td><span class="chip c-neg">3</span></td><td><span class="chip c-neg">6</span></td><td><span class="chip c-neg">−4</span></td><td class="verdict">First non-Congress chance, fractured it.</td></tr>
+        <tr><td class="rank">9</td><td class="item">Rajiv Gandhi</td><td>5.6%</td><td><span class="chip c-pos">6</span></td><td><span class="chip c-pos">2</span></td><td><span class="chip c-neg">5</span></td><td><span class="chip c-neg">8</span></td><td><span class="chip c-neg">−5</span></td><td class="verdict">414 seats — the biggest mandate in history, least converted. Highest squander on the board.</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="panel info">
+      <h3>Reading the board</h3>
+      <p>Only four PMs come out net-positive once squander and damage are counted, and Nehru barely — his enormous plant is nearly cancelled by his enormous damage. The pattern that separates the top from the bottom is not growth: it's <strong>what hand they were dealt and what they did with it</strong>. Rao and Shastri were handed crises and converted them. Rajiv and Modi were handed gifts — a record mandate, a collapsed oil price — and the model says they banked less of it.</p>
+    </div>
+  </section>
+
+  <!-- ============ TAB 4 ============ -->
+  <section role="tabpanel" id="p4" aria-labelledby="t4" hidden>
+    <h2>Context &amp; caveats</h2>
+    <p class="lede">What the model already prices in, what it doesn't, and where the numbers are soft.</p>
+
+    <div class="panel">
+      <h3>Cheap oil — already priced in</h3>
+      <p>Crude fell from ~$110 to ~$30 across 2014–16, and India imports roughly 85% of its oil: a once-in-a-generation fiscal gift. That is exactly what Modi's <strong>squander 7</strong> encodes — the windfall was largely absorbed into excise rather than passed to consumers or converted into a lasting asset. Without that single score he is net-positive. It is the number carrying the whole argument.</p>
+    </div>
+
+    <div class="panel">
+      <h3>Majority vs coalition — not yet priced in</h3>
+      <p>This cuts against NDA and is currently missing. UPA-I governed on Left outside support and UPA-II on a full coalition. NDA had a BJP single-party majority in 2014 (282 seats) and 2019 (303) — and by the same squander logic, <strong>a majority is a good hand</strong>. If you weight it, either Modi's squander rises or a fifth "mandate converted" component gets added.</p>
+      <p>One constraint on doing so: NDA-III (2024, BJP 240) is a coalition again, dependent on TDP and JD(U). Any mandate adjustment should apply to 2014–24, not the full run.</p>
+    </div>
+
+    <div class="panel">
+      <h3>Crisis symmetry</h3>
+      <p>UPA absorbed the 2008 global financial crisis and the 2013 taper tantrum. NDA absorbed COVID. Neither side gets to claim a clean run, and the crisis-converted component is where that belongs.</p>
+    </div>
+
+    <div class="panel">
+      <h3>Four things to fix before citing this publicly</h3>
+      <p><strong>1. Every potential score is hindsight judgment</strong> taking a position in a live political fight. A BJP partisan and a Congress partisan would each call half of it rigged. "A framework for argument" is the only honest framing — not a scoreboard.</p>
+      <p><strong>2. Several Total-column multiples flatter whoever they favour.</strong> Solar and semiconductors start from near-zero bases. Figures like 520+ GW capacity, 110 GW solar and 33× defence exports looked rounded-up or optimistic in the source table — verify each before citing.</p>
+      <p><strong>3. The highways row has a definitional seam.</strong> National highway length goes 79,116 km (2013) → 91,287 km (2014) in a single year. That ~12,000 km jump is state highways being <em>reclassified</em> as NH, not road built. The NDA-decade addition is still large, but the start-point should be checked before the "4× the pace" claim goes public.</p>
+      <p><strong>4. GDP rates straddle a methodology change.</strong> Growth figures spanning 2004–2026 cross the 2015 base-year revision (2004-05 → 2011-12 series). The 7.7% and 6.0% averages are not measured on an identical basis end to end.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Assembled 14 August 2026. Potential scores are subjective hindsight judgments, not measurements; hard figures are as sourced in the underlying analysis and carry the caveats on tab 4. Presented as a structure for argument — reasonable people will move these numbers, and the model is designed so they can.</p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+  function show(id, push){
+    tabs.forEach(function(t){
+      var sel = t.id === id;
+      t.setAttribute('aria-selected', sel ? 'true' : 'false');
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !sel;
+    });
+    if(push && history.replaceState){ history.replaceState(null,'','#'+id); }
+  }
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ show(t.id, true); });
+    t.addEventListener('keydown', function(e){
+      var d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if(!d) return;
+      e.preventDefault();
+      var n = tabs[(i + d + tabs.length) % tabs.length];
+      n.focus(); show(n.id, true);
+    });
+  });
+  var h = (location.hash || '').replace('#','');
+  if(h && document.getElementById(h) && document.getElementById(h).getAttribute('role') === 'tab'){ show(h, false); }
+})();
+</script>
+</body>
+</html>
